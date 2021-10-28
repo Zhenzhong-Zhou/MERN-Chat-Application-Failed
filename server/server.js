@@ -10,6 +10,7 @@ import cors from "cors";
 
 // Imports Routes
 import indexRoutes from "./routes/index.js";
+import authRoutes from "./routes/auth.js";
 
 // Initialization App
 const app = express();
@@ -30,6 +31,7 @@ app.use(cors());
 
 // Routes
 app.use("/", indexRoutes);
+app.use("/api/auth", authRoutes);
 
 // Socket.io connection
 io.on("connection", (socket) => {
