@@ -42,23 +42,15 @@ app.use("/api/auth", authRoutes);
 io.on("connection", (socket) => {
 	console.log(`${socket.id} has connected!`);
 	socket.on("join_room", (username, data) => {
-		// console.log("user: ", username)
-		// console.log("data: ", data)
 		const newUser = new User({
 			username
 		});
 		newUser.save().then(() => {
 			socket.join(data);
 		});
-
-		// socket.join(data);
 		console.log(`User with ID: ${socket.id} joined room: ${data}`)
 	});
 	socket.on("send_messages", (messageData) => {
-		console.log(messageData)
-		console.log(messageData.message)
-		// socket.to(messageData.room).emit("receive_messages", messageData);
-
 		const message = new Message({
 			username: messageData.username,
 			messages: messageData.message,
