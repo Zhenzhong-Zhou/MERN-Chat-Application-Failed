@@ -12,13 +12,17 @@ import cors from "cors";
 import indexRoutes from "./routes/index.js";
 import authRoutes from "./routes/auth.js";
 
+// Imports models
+import Message from "./models/message.js";
+
 // Initialization App
 const app = express();
 dotenv.config();
 const server = createServer(app);
 const io = new Server(server, {
 	cors: {
-		origin: "*"
+		origin: "*",
+		methods: ["GET", "POST"]
 	}
 });
 
@@ -35,9 +39,21 @@ app.use("/api/auth", authRoutes);
 
 // Socket.io connection
 io.on("connection", (socket) => {
-	console.log("someone has connected!");
+	console.log(`${socket.id} has connected!`);
+	socket.on("join_room", (data) => {
+		socket.join(data);
+		console.log(`User with ID: ${socket.id} joined room: ${data}`)
+	});
+	socket.on("send_messages", (messageData) => {
+		socket.to(messageData.room).emit("receive_messages", messageData);
+
+		// const message = new Message({messageData});
+		// message.save().then(() => {
+		// 	io.emit("message", messageData);
+		// });
+	});
 	socket.on("disconnect", () => {
-		console.log("someone has left....")
+		console.log(`${socket.id} has left...`)
 	});
 });
 
