@@ -45,12 +45,18 @@ io.on("connection", (socket) => {
 		console.log(`User with ID: ${socket.id} joined room: ${data}`)
 	});
 	socket.on("send_messages", (messageData) => {
-		socket.to(messageData.room).emit("receive_messages", messageData);
+		console.log(messageData)
+		console.log(messageData.message)
+		// socket.to(messageData.room).emit("receive_messages", messageData);
 
-		// const message = new Message({messageData});
-		// message.save().then(() => {
-		// 	io.emit("message", messageData);
-		// });
+		const message = new Message({
+			username: messageData.username,
+			messages: messageData.message,
+			room: messageData.room,
+		});
+		message.save().then(() => {
+			socket.to(messageData.room).emit("receive_messages", messageData);
+		});
 	});
 	socket.on("disconnect", () => {
 		console.log(`${socket.id} has left...`)
