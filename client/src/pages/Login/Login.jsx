@@ -9,7 +9,7 @@ const Login = ({socket}) => {
 	const joinRoom = (e) => {
 		e.preventDefault();
 		if (username !== "" && room !== "") {
-			socket.emit("join_room", room);
+			socket.emit("join_room", username, room);
 			setMessages(true);
 		}
 	};

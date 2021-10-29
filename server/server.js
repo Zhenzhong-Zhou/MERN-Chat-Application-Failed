@@ -13,6 +13,7 @@ import indexRoutes from "./routes/index.js";
 import authRoutes from "./routes/auth.js";
 
 // Imports models
+import User from "./models/user.js";
 import Message from "./models/message.js";
 
 // Initialization App
@@ -40,8 +41,17 @@ app.use("/api/auth", authRoutes);
 // Socket.io connection
 io.on("connection", (socket) => {
 	console.log(`${socket.id} has connected!`);
-	socket.on("join_room", (data) => {
-		socket.join(data);
+	socket.on("join_room", (username, data) => {
+		// console.log("user: ", username)
+		// console.log("data: ", data)
+		const newUser = new User({
+			username
+		});
+		newUser.save().then(() => {
+			socket.join(data);
+		});
+
+		// socket.join(data);
 		console.log(`User with ID: ${socket.id} joined room: ${data}`)
 	});
 	socket.on("send_messages", (messageData) => {
