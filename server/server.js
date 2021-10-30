@@ -41,14 +41,16 @@ app.use("/api/auth", authRoutes);
 // Socket.io connection
 io.on("connection", (socket) => {
 	console.log(`${socket.id} has connected!`);
-	socket.on("join_room", (username, data) => {
+	socket.on("join_room", (username, email, password) => {
 		const newUser = new User({
-			username
+			username,
+			email,
+			password
 		});
 		newUser.save().then(() => {
-			socket.join(data);
+			// socket.join(data);
 		});
-		console.log(`User with ID: ${socket.id} joined room: ${data}`)
+		// console.log(`User with ID: ${socket.id} joined room: ${data}`)
 	});
 	socket.on("send_messages", (messageData) => {
 		const message = new Message({

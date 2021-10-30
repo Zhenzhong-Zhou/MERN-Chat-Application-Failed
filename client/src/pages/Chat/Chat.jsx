@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-const Chat = ({socket, username, room}) => {
+const Chat = ({socket, username, email, password, room}) => {
 	const [currentMessage, setCurrentMessage] = useState();
 
 	const sendMessage = async () => {
@@ -8,6 +8,8 @@ const Chat = ({socket, username, room}) => {
 			const messageData = {
 				room,
 				username,
+				email,
+				password,
 				message: currentMessage,
 				time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes()
 			};
